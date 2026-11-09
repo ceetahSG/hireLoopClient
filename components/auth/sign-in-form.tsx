@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { GoogleIcon } from "@/components/auth/google-icon"
 import { authClient } from "@/lib/auth-client"
+import { redirect } from "next/navigation"
 
 export interface SignInFormData {
   email: string
@@ -60,6 +61,7 @@ export function SignInForm({ onSuccess, onToggleToSignUp }: SignInFormProps) {
       setStatusMessage(`Error: ${error.message}`)
     } else {
       console.log("Sign In Success:", data)
+      redirect("/") // Redirect to home page on successful sign-in
     }
   }
 

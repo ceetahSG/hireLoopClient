@@ -20,8 +20,9 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { GoogleIcon } from "@/components/auth/google-icon"
 import { cn } from "@/lib/utils"
 import { authClient } from "@/lib/auth-client"
+import { redirect } from "next/navigation"
 
-export type AccountRole = "job-seeker" | "employer"
+export type AccountRole = "job-seeker" | "employer" | "admin"
 
 export interface SignUpFormData {
   role: AccountRole
@@ -59,24 +60,36 @@ export function SignUpForm({ onSuccess, onToggleToSignIn }: SignUpFormProps) {
       confirmPassword,
       agreeTerms,
     }
-
     // Event handler: collects the form data
-    console.log("Collected Sign Up Form Data:", formData)
+    if (formData.password !== formData.confirmPassword) {
+      setStatusMessage("Error: Passwords do not match.")
+      return
+    } else {
+      console.log("Collected Sign Up Form Data:", formData)
 
-    setStatusMessage(
-      `Form data collected successfully for ${formData.name || formData.email || "user"} (${formData.role}). Check console for details.`
-    )
+      setStatusMessage(
+        `Form data collected successfully for ${formData.name || formData.email || "user"} (${formData.role}). Check console for details.`
+      )
 
-    if (onSuccess) {
-      onSuccess(formData)
+      if (onSuccess) {
+        onSuccess(formData)
+      }
+
+      // Note for Better-Auth integration:
+      const { data, error } = await authClient.signUp.email({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        role: formData.role,
+      })
+      if (error) {
+        console.error("Sign Up Error:", error)
+        setStatusMessage(`Error: ${error.message}`)
+      } else {
+        console.log("Sign Up Success:", data)
+        redirect("/sign-in") // Redirect to sign-in page after successful sign-up
+      }
     }
-
-    // Note for Better-Auth integration:
-    await authClient.signUp.email({
-      name: formData.name,
-      email: formData.email,
-      password: formData.password,
-    })
   }
 
   const handleGoogleSignUp = () => {
@@ -141,6 +154,27 @@ export function SignUpForm({ onSuccess, onToggleToSignIn }: SignUpFormProps) {
             <div className="text-xs">
               <span className="block font-semibold">Hire Talent</span>
               <span className="text-[11px] text-white/50">Employer</span>
+            </div>
+          </button>
+          <button
+            type="button"
+            onClick={() => setRole("admin")}
+            className={cn(
+              "flex items-center gap-2.5 rounded-xl border p-3 text-left transition-all",
+              role === "admin"
+                ? "border-cyan-400/60 bg-cyan-400/[0.08] text-white ring-1 ring-cyan-400/30"
+                : "border-white/10 bg-white/[0.03] text-white/65 hover:border-white/20 hover:text-white"
+            )}
+          >
+            <Briefcase
+              className={cn(
+                "size-4 shrink-0",
+                role === "employer" ? "text-cyan-400" : "text-white/40"
+              )}
+            />
+            <div className="text-xs">
+              <span className="block font-semibold">Admin</span>
+              <span className="text-[11px] text-white/50">Admin</span>
             </div>
           </button>
         </div>
