@@ -50,13 +50,13 @@ export function Navbar() {
 
         <div className="hidden items-center gap-3 lg:flex">
           <Link
-            href="#login"
+            href="/sign-in"
             className="rounded-full px-4 py-2.5 text-[13px] font-medium text-white/75 transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-400"
           >
             Log in
           </Link>
           <Link
-            href="#get-started"
+            href="/sign-up"
             className="rounded-full bg-white px-5 py-2.5 text-[13px] font-semibold text-[#101014] transition-colors hover:bg-cyan-100 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-400"
           >
             Get started
@@ -91,14 +91,14 @@ export function Navbar() {
             ))}
             <div className="flex items-center gap-3 pt-5">
               <Link
-                href="#login"
+                href="/sign-in"
                 onClick={() => setIsMenuOpen(false)}
                 className="flex-1 rounded-full border border-white/15 px-5 py-3 text-center text-sm font-medium text-white/80 transition-colors hover:border-white/30 hover:text-white"
               >
                 Log in
               </Link>
               <Link
-                href="#get-started"
+                href="/sign-up"
                 onClick={() => setIsMenuOpen(false)}
                 className="flex-1 rounded-full bg-white px-5 py-3 text-center text-sm font-semibold text-[#101014] transition-colors hover:bg-cyan-100"
               >
