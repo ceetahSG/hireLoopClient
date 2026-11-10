@@ -81,7 +81,7 @@ export function AddJobForm() {
     event.preventDefault()
     console.log("New job data:", job)
     const result = await createJob(job)
-    if(result.acknowledged) {
+    if (result.acknowledged) {
       alert("Job created successfully!")
       setJob(INITIAL_JOB_DATA) // Reset the form after successful submission
     } else {
