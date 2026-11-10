@@ -1,5 +1,6 @@
 import {
   BriefcaseBusiness,
+  Delete,
   Eye,
   MapPin,
   Pencil,
@@ -17,7 +18,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import type { JobListData } from "./dummy-jobs"
+import { getJobs } from "@/lib/actions/api/jobs"
+import { DeleteJobDialog } from "@/app/components/DeleteDIalog"
+import { JobFormData } from "../add-job/add-job-form"
+
+export type JobListData = JobFormData & {
+  applicants: number
+  postedAgo: string
+  _id: string
+}
+const Jobs = await getJobs()
+export const JobList: JobListData[] = Jobs
+console.log("Jobs:", Jobs)
 
 const JOB_TYPE_LABEL = {
   "Full-time": "secondary",
@@ -55,7 +67,7 @@ function formatDeadline(job: JobListData) {
   })
 }
 
-export function ManageJobsTable({ jobs }: { jobs: JobListData[] }) {
+export async function ManageJobsTable({ jobs }: { jobs: JobListData[] }) {
   return (
     <Table className="min-w-4xl">
       <TableHeader>
@@ -80,7 +92,7 @@ export function ManageJobsTable({ jobs }: { jobs: JobListData[] }) {
         {jobs.map((job) => {
           const expired = isExpired(job)
           return (
-            <TableRow key={job.title}>
+            <TableRow key={job._id}>
               <TableCell>
                 <div className="flex items-center gap-2.5">
                   <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
@@ -141,13 +153,7 @@ export function ManageJobsTable({ jobs }: { jobs: JobListData[] }) {
                   <Button size="icon-sm" variant="ghost" aria-label="View job">
                     <Eye />
                   </Button>
-                  <Button
-                    size="icon-sm"
-                    variant="ghost"
-                    aria-label="Delete job"
-                  >
-                    <Trash2 />
-                  </Button>
+                  <DeleteJobDialog job={job} />
                 </div>
               </TableCell>
             </TableRow>

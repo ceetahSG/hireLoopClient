@@ -156,7 +156,7 @@ const menuItemByRole: Record<UserRole, MenuItem[]> = {
 export function DashboardSidebar() {
   const { data: session, isPending } = useSession()
   const userRole = (session?.user?.role || "job_seeker") as UserRole // Default to "job_seeker" if role is undefined
-  console.log("User Role:", userRole) // Debugging: Log the user role
+  // console.log("User Role:", userRole) // Debugging: Log the user role
 
   return (
     <Sidebar>

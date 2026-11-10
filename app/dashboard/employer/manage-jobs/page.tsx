@@ -2,10 +2,12 @@ import Link from "next/link"
 import { Plus } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { dummyJobs } from "./dummy-jobs"
-import { ManageJobsTable } from "./manage-jobs-table"
+import { JobListData, ManageJobsTable } from "./manage-jobs-table"
+import { getJobs } from "@/lib/actions/api/jobs"
 
-const ManageJobsPage = () => {
+const ManageJobsPage = async () => {
+  const Jobs = await getJobs()
+  const JobList: JobListData[] = Jobs
   return (
     <div className="flex flex-col gap-6 p-6">
       {/* Top bar */}
@@ -30,7 +32,7 @@ const ManageJobsPage = () => {
 
       {/* Data table — scroll horizontally on small screens */}
       <div className="grid grid-cols-1 gap-4">
-        <ManageJobsTable jobs={dummyJobs} />
+        <ManageJobsTable jobs={JobList} />
       </div>
     </div>
   )
