@@ -9,16 +9,22 @@ import logo from "@/app/images/logo.png"
 import { signOut, useSession } from "@/lib/auth-client"
 import { Button } from "@base-ui/react"
 
-const links = [
-  { label: "Find talent", href: "#talent" },
-  { label: "Find work", href: "#work" },
-  { label: "How it works", href: "#how-it-works" },
-  { label: "Resources", href: "#resources" },
-]
-
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { data: session } = useSession()
+
+  console.log("Session data in Navbar:", session?.user.role) // Debugging line
+
+  const links = [
+    { label: "Find talent", href: "#talent" },
+    { label: "Find work", href: "#work" },
+    { label: "How it works", href: "#how-it-works" },
+    { label: "Resources", href: "#resources" },
+    {
+      label: "Dashboard",
+      href: `/dashboard/${session?.user?.role || "job_seeker"}`,
+    },
+  ]
   const handleLogout = async () => {
     await signOut()
   }

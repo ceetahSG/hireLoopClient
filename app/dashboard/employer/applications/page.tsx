@@ -1,6 +1,6 @@
 import React from 'react';
 
-const EmployeeDashboardPage = () => {
+const ApplicationsPage = () => {
     return (
         <div>
             
@@ -8,4 +8,4 @@ const EmployeeDashboardPage = () => {
     );
 };
 
-export default EmployeeDashboardPage;
+export default ApplicationsPage;
