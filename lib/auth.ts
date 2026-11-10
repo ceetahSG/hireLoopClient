@@ -2,9 +2,7 @@ import { betterAuth } from "better-auth"
 import { MongoClient } from "mongodb"
 import { mongodbAdapter } from "@better-auth/mongo-adapter"
 
-const client = new MongoClient(
-  "mongodb://hireloopAdmin:nb1fXWhsqMLPMACE@ac-p4mwva5-shard-00-00.tiw02ei.mongodb.net:27017,ac-p4mwva5-shard-00-01.tiw02ei.mongodb.net:27017,ac-p4mwva5-shard-00-02.tiw02ei.mongodb.net:27017/?ssl=true&replicaSet=atlas-8cmt6h-shard-0&authSource=admin"
-)
+const client = new MongoClient(process.env.MONGODB_URI as string)
 const db = client.db("hireLoopDb")
 
 export const auth = betterAuth({
@@ -16,7 +14,7 @@ export const auth = betterAuth({
   user: {
     additionalFields: {
       role: {
-        type: ["job-seeker", "employer", "admin"],
+        type: ["job_seeker", "employer", "admin"],
         input: true,
       },
     },

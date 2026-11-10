@@ -22,7 +22,7 @@ import { cn } from "@/lib/utils"
 import { authClient } from "@/lib/auth-client"
 import { redirect } from "next/navigation"
 
-export type AccountRole = "job-seeker" | "employer" | "admin"
+export type AccountRole = "job_seeker" | "employer" | "admin"
 
 export interface SignUpFormData {
   role: AccountRole
@@ -39,7 +39,7 @@ interface SignUpFormProps {
 }
 
 export function SignUpForm({ onSuccess, onToggleToSignIn }: SignUpFormProps) {
-  const [role, setRole] = useState<AccountRole>("job-seeker")
+  const [role, setRole] = useState<AccountRole>("job_seeker")
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -80,7 +80,7 @@ export function SignUpForm({ onSuccess, onToggleToSignIn }: SignUpFormProps) {
         name: formData.name,
         email: formData.email,
         password: formData.password,
-        role: formData.role,
+        role: formData.role === "job_seeker" ? "job_seeker" : formData.role,
       })
       if (error) {
         console.error("Sign Up Error:", error)
@@ -115,10 +115,10 @@ export function SignUpForm({ onSuccess, onToggleToSignIn }: SignUpFormProps) {
         <div className="grid grid-cols-2 gap-2.5">
           <button
             type="button"
-            onClick={() => setRole("job-seeker")}
+            onClick={() => setRole("job_seeker")}
             className={cn(
               "flex items-center gap-2.5 rounded-xl border p-3 text-left transition-all",
-              role === "job-seeker"
+              role === "job_seeker"
                 ? "border-cyan-400/60 bg-cyan-400/[0.08] text-white ring-1 ring-cyan-400/30"
                 : "border-white/10 bg-white/[0.03] text-white/65 hover:border-white/20 hover:text-white"
             )}
@@ -126,7 +126,7 @@ export function SignUpForm({ onSuccess, onToggleToSignIn }: SignUpFormProps) {
             <UserCheck
               className={cn(
                 "size-4 shrink-0",
-                role === "job-seeker" ? "text-cyan-400" : "text-white/40"
+                role === "job_seeker" ? "text-cyan-400" : "text-white/40"
               )}
             />
             <div className="text-xs">
