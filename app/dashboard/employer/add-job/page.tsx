@@ -1,7 +1,7 @@
-import React from "react"
+import { AddJobForm } from "./add-job-form"
 
 const AddJobPage = () => {
-  return <div></div>
+  return <AddJobForm />
 }
 
 export default AddJobPage

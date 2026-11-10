@@ -10,7 +10,7 @@ import {
 } from "next/font/google"
 
 import "./globals.css"
-// import { ThemeProvider } from "@/components/theme-provider"
+import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils"
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
@@ -73,7 +73,9 @@ export default function RootLayout({
         fontInterTight.variable
       )}
     >
-      <body>{children}</body>
+      <body>
+        <ThemeProvider>{children}</ThemeProvider>
+      </body>
     </html>
   )
 }
