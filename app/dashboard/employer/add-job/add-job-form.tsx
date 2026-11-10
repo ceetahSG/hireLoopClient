@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
+import { createJob } from "@/lib/actions/job"
 
 const JOB_TYPES = ["Full-time", "Part-time", "Contract", "Internship"] as const
 
@@ -36,7 +37,7 @@ const SALARY_FREQUENCIES = [
   "per year",
 ] as const
 
-type JobFormData = {
+export type JobFormData = {
   title: string
   companyName: string
   jobCategory: string
@@ -79,6 +80,13 @@ export function AddJobForm() {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     console.log("New job data:", job)
+    const result = await createJob(job)
+    if(result.acknowledged) {
+      alert("Job created successfully!")
+      setJob(INITIAL_JOB_DATA) // Reset the form after successful submission
+    } else {
+      alert("Failed to create job. Please try again.")
+    }
   }
 
   return (
