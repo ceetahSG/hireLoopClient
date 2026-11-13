@@ -17,9 +17,14 @@ import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import { createJob } from "@/lib/actions/job"
 
-const JOB_TYPES = ["Full-time", "Part-time", "Contract", "Internship"] as const
+export const JOB_TYPES = [
+  "Full-time",
+  "Part-time",
+  "Contract",
+  "Internship",
+] as const
 
-const JOB_CATEGORIES = [
+export const JOB_CATEGORIES = [
   "Engineering & Tech",
   "Design",
   "Product",
