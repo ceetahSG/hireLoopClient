@@ -5,9 +5,11 @@ import { Search } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { useRouter } from "next/navigation"
 
 export function SearchJobs() {
   const [query, setQuery] = useState("")
+  const router = useRouter()
 
   // Search submit intentionally does nothing for now —
   // no search-query/URL sync here yet (intentionally left for later).
@@ -16,13 +18,24 @@ export function SearchJobs() {
       className="flex flex-col gap-2 sm:flex-row"
       onSubmit={(event) => {
         event.preventDefault()
-        
+        const formData = new FormData(event.currentTarget)
+        const data = Object.fromEntries(formData.entries())
+
+        // console.log("search data:", data)
+
+        const search = data.searchField as string
+        const params = new URLSearchParams()
+
+        params.set("search", search)
+        router.push(`/browse-jobs?${params.toString()}`)
+
         // TODO: update the jobs query with the search term
       }}
     >
       <div className="relative flex-1">
         <Input
           aria-label="Search jobs"
+          name="searchField"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           placeholder="Search by job title, keywords..."

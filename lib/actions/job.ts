@@ -1,4 +1,5 @@
 import { JobFormData } from "@/app/dashboard/employer/add-job/add-job-form"
+import { CreateJobApplication } from "@/lib/types/job-application"
 
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000"
 export const createJob = async (data: JobFormData) => {
@@ -18,4 +19,15 @@ export const deleteJob = async (jobId: string) => {
     method: "DELETE",
   })
   return res.json()
+}
+
+export const applyToJob = async (data: CreateJobApplication) => {
+  const response = await fetch(`${baseUrl}/applied-jobs`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  })
+  return response.json()
 }

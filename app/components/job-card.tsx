@@ -5,9 +5,11 @@ import { Banknote, Bookmark, CircleCheck, Flame, Zap } from "lucide-react"
 
 import type { JobFormData } from "@/app/dashboard/employer/add-job/add-job-form"
 import { cn } from "@/lib/utils"
+import { useRouter } from "next/navigation"
 
 export type JobCardData = Pick<
   JobFormData,
+  | "_id"
   | "title"
   | "companyName"
   | "jobType"
@@ -69,8 +71,19 @@ export function JobCard({ job }: { job: JobCardData }) {
 
   const salary = formatSalary(job)
 
+  const router = useRouter()
+
+  const handleViewDetails = (jobId: string | undefined) => {
+    if (!jobId) return
+    router.push(`/browse-jobs/${jobId}`)
+    console.log(`Navigating to job details for job ID: ${jobId}`)
+  }
+
   return (
-    <article className="flex gap-4 rounded-xl border bg-card p-4 transition-colors hover:border-white/20">
+    <article
+      onClick={() => handleViewDetails(job._id)}
+      className="flex gap-4 rounded-xl border bg-card p-4 transition-colors hover:border-white/20"
+    >
       {/* Company logo */}
       <div className="flex size-12 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-gradient-to-br from-white/10 to-white/[0.02] text-sm font-semibold">
         {job.companyName.charAt(0) || "•"}

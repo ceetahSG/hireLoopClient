@@ -1,12 +1,11 @@
 "use client"
 
-import { useState } from "react"
-
 import {
   JOB_CATEGORIES,
   JOB_TYPES,
 } from "@/app/dashboard/employer/add-job/add-job-form"
 import { FilterGroup, type FilterOption } from "./filter-group"
+import { useRouter, useSearchParams } from "next/navigation"
 
 // Dummy counts until they come back from the API
 const JOB_TYPE_COUNTS: Record<(typeof JOB_TYPES)[number], number> = {
@@ -31,15 +30,29 @@ const JOB_CATEGORY_OPTIONS: FilterOption[] = JOB_CATEGORIES.map(
 const REMOTE_OPTIONS: FilterOption[] = [{ label: "Remote Only" }]
 
 export function BrowseJobsFilters() {
-  const [jobTypes, setJobTypes] = useState<string[]>([])
-  const [jobCategories, setJobCategories] = useState<string[]>([])
-  const [remoteOnly, setRemoteOnly] = useState(false)
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const jobTypes = searchParams.get("jobType")?.split(",").filter(Boolean) ?? []
+  const jobCategories =
+    searchParams.get("category")?.split(",").filter(Boolean) ?? []
+  const remoteOnly = searchParams.get("isRemote") === "true"
 
   const toggleValue = (list: string[], value: string) =>
     list.includes(value) ? list.filter((v) => v !== value) : [...list, value]
 
-  // Handlers only flip the local selection for now —
-  // no search-query/URL sync here yet (intentionally left for later).
+  const updateUrl = (key: string, value: string | null) => {
+    const params = new URLSearchParams(searchParams.toString())
+
+    if (value) {
+      params.set(key, value)
+    } else {
+      params.delete(key)
+    }
+
+    const query = params.toString()
+    router.push(query ? `/browse-jobs?${query}` : "/browse-jobs")
+  }
+
   return (
     <aside className="flex w-full flex-col gap-5 rounded-lg border bg-card p-4">
       <h3 className="text-base font-semibold">Filters</h3>
@@ -47,27 +60,30 @@ export function BrowseJobsFilters() {
         title="Job Type"
         options={JOB_TYPE_OPTIONS}
         selected={jobTypes}
-        onToggle={(label) => {
-          setJobTypes((prev) => toggleValue(prev, label))
-          // TODO: update the jobs query with the selected job types
+        onToggle={(label, checked) => {
+          const next = checked
+            ? toggleValue(jobTypes, label)
+            : jobTypes.filter((value) => value !== label)
+          updateUrl("jobType", next.length ? next.join(",") : null)
         }}
       />
       <FilterGroup
         title="Job Category"
         options={JOB_CATEGORY_OPTIONS}
         selected={jobCategories}
-        onToggle={(label) => {
-          setJobCategories((prev) => toggleValue(prev, label))
-          // TODO: update the jobs query with the selected categories
+        onToggle={(label, checked) => {
+          const next = checked
+            ? toggleValue(jobCategories, label)
+            : jobCategories.filter((value) => value !== label)
+          updateUrl("category", next.length ? next.join(",") : null)
         }}
       />
       <FilterGroup
         title="Work Mode"
         options={REMOTE_OPTIONS}
         selected={remoteOnly ? ["Remote Only"] : []}
-        onToggle={() => {
-          setRemoteOnly((prev) => !prev)
-          // TODO: update the jobs query with the isRemote flag
+        onToggle={(_label, checked) => {
+          updateUrl("isRemote", checked ? "true" : null)
         }}
       />
     </aside>

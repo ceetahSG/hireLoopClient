@@ -1,7 +1,7 @@
 import { getJobs } from "@/lib/actions/api/jobs"
 import React from "react"
 import { BrowseJobsFilters } from "./browse-jobs-filters"
-import { JobCard, type JobCardData } from "./job-card"
+import { JobCard, type JobCardData } from "../components/job-card"
 import { SearchJobs } from "./search-jobs"
 import { SortJobs } from "./sort-jobs"
 

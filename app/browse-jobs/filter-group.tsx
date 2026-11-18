@@ -10,7 +10,7 @@ type FilterGroupProps = {
   options: FilterOption[]
   /** Currently selected option labels */
   selected: string[]
-  onToggle?: (label: string) => void
+  onToggle?: (label: string, checked: boolean) => void
 }
 
 /**
@@ -34,7 +34,9 @@ export function FilterGroup({
           >
             <Checkbox
               checked={selected.includes(option.label)}
-              onCheckedChange={() => onToggle?.(option.label)}
+              onCheckedChange={(checked) =>
+                onToggle?.(option.label, checked === true)
+              }
             />
             <span>{option.label}</span>
             {option.count !== undefined && (

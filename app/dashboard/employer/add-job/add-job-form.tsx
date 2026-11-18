@@ -43,6 +43,7 @@ const SALARY_FREQUENCIES = [
 ] as const
 
 export type JobFormData = {
+  _id?: string
   title: string
   companyName: string
   jobCategory: string

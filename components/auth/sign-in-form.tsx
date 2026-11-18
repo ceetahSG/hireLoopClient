@@ -10,7 +10,8 @@ import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { GoogleIcon } from "@/components/auth/google-icon"
 import { authClient } from "@/lib/auth-client"
-import { redirect } from "next/navigation"
+import { redirect, useSearchParams } from "next/navigation"
+import { Suspense } from "react"
 
 export interface SignInFormData {
   email: string
@@ -23,12 +24,15 @@ interface SignInFormProps {
   onToggleToSignUp?: () => void
 }
 
-export function SignInForm({ onSuccess, onToggleToSignUp }: SignInFormProps) {
+// `useSearchParams` requires a Suspense boundary during static prerendering
+function SignInFormInner({ onSuccess, onToggleToSignUp }: SignInFormProps) {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [rememberMe, setRememberMe] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [statusMessage, setStatusMessage] = useState<string | null>(null)
+  const searchParams = useSearchParams()
+  const redirectTo = searchParams.get("redirectTo") || "/"
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -55,6 +59,7 @@ export function SignInForm({ onSuccess, onToggleToSignUp }: SignInFormProps) {
       email: formData.email,
       password: formData.password,
       rememberMe: formData.rememberMe,
+      callbackURL: redirectTo, // Redirect to the specified URL after
     })
     if (error) {
       console.error("Sign In Error:", error)
@@ -216,5 +221,13 @@ export function SignInForm({ onSuccess, onToggleToSignUp }: SignInFormProps) {
         </Link>
       </p>
     </div>
+  )
+}
+
+export function SignInForm(props: SignInFormProps) {
+  return (
+    <Suspense>
+      <SignInFormInner {...props} />
+    </Suspense>
   )
 }
